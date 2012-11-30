@@ -12,13 +12,18 @@ module PayFu
       query_params = {
         :partner => ActiveMerchant::Billing::Integrations::Alipay::ACCOUNT,
         :out_trade_no => options[:out_trade_no],
-        :total_fee => options[:amount],
+        :price => options[:amount],
+        :quantity => '1',
         :seller_email => ActiveMerchant::Billing::Integrations::Alipay::EMAIL,
         :notify_url => options[:notify_url],
+        :body => options[:body],
         :"_input_charset" => 'utf-8',
-        :service => ActiveMerchant::Billing::Integrations::Alipay::Helper::CREATE_DIRECT_PAY_BY_USER,
+        :service => ActiveMerchant::Billing::Integrations::Alipay::Helper::CREATE_PARTNER_TRADE_BY_BUYER,
         :payment_type => "1",
-        :subject => options[:subject]
+        :subject => options[:subject],
+        :logistics_type => options[:logistics_type],
+        :logistics_fee => options[:logistics_fee],
+        :logistics_payment => options[:logistics_payment]
       }
       query_params[:body] = options[:body] if options[:body]
       query_params[:return_url] = options[:return_url] if options[:return_url]

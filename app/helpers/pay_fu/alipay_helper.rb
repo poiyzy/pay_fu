@@ -23,7 +23,9 @@ module PayFu
         :subject => options[:subject],
         :logistics_type => options[:logistics_type],
         :logistics_fee => options[:logistics_fee],
-        :logistics_payment => options[:logistics_payment]
+        :logistics_payment => options[:logistics_payment],
+        :receive_name => options[:recevie_name],
+        :receive_address => option[:recevie_address]
       }
       query_params[:body] = options[:body] if options[:body]
       query_params[:return_url] = options[:return_url] if options[:return_url]

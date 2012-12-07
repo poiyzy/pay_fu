@@ -1,3 +1,5 @@
+require 'digest/md5'
+
 module PayFu
   class AlipayTransactionsController < ApplicationController
     include ActiveMerchant::Billing::Integrations
@@ -10,6 +12,9 @@ module PayFu
         else
           PayFu::AlipayTransaction.create(transaction_attributes(notify))
         end
+
+        send_goods(trade_no: notify.trade_no, price: notify.price, invoice_no: notify.out_trade_no) if notify.trade_status == "WAIT_SELLER_SEND_GOODS"
+
       end
       render :nothing => true
     end
@@ -25,5 +30,34 @@ module PayFu
         :user_id => notify.receive_mobile.to_i
       }
     end
+
+    def send_goods(options={})
+      encoded_query_string = sign_params!(query_params(options)).map {|key, value| "#{key}=#{CGI.escape(value)}" }.join("&")
+      redirect_to "https://mapi.alipay.com/gateway.do?" + encoded_query_string
+    end
+
+    private
+    def query_params(options)
+      query_params = {
+        :partner => ActiveMerchant::Billing::Integrations::Alipay::ACCOUNT,
+        :trade_no => options[:trade_no],
+        :price => options[:amount],
+        :"_input_charset" => 'utf-8',
+        :service => "send_goods_confirm_by_platform",
+        :logistics_name => "zirannanren",
+        :invoice_no => options[:invoce_no],
+        :transport_type => "POST"
+      }
+      Hash[query_params.sort]
+    end
+
+    def sign_params!(params)
+      raw_query_string = params.map {|key, value| "#{key}=#{CGI.unescape(value)}" }.join("&")
+      sign = Digest::MD5.hexdigest(raw_query_string + ActiveMerchant::Billing::Integrations::Alipay::KEY)
+      params[:sign] = sign
+      params[:sign_type] = 'MD5'
+      params
+    end
+
   end
 end

@@ -45,7 +45,7 @@ module PayFu
         :"_input_charset" => 'utf-8',
         :service => "send_goods_confirm_by_platform",
         :logistics_name => "zirannanren",
-        :invoice_no => options[:invoce_no],
+        :invoice_no => options[:invoice_no],
         :transport_type => "POST"
       }
       Hash[query_params.sort]

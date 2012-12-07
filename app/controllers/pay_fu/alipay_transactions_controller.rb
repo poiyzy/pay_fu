@@ -22,7 +22,7 @@ module PayFu
         :payment_date => notify.notify_time,
         :gross => notify.total_fee,
         :raw_post => notify.raw,
-        :user_id => notify.receive_mobile
+        :user_id => notify.receive_mobile.to_i
       }
     end
   end

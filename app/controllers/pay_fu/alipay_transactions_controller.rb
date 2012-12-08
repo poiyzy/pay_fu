@@ -13,7 +13,7 @@ module PayFu
           PayFu::AlipayTransaction.create(transaction_attributes(notify))
         end
 
-        send_goods(trade_no: notify.trade_no, price: notify.price, invoice_no: notify.out_trade_no) if notify.trade_status == "WAIT_SELLER_SEND_GOODS"
+        send_goods(trade_no: notify.trade_no, amount: notify.price, invoice_no: notify.out_trade_no) if notify.trade_status == "WAIT_SELLER_SEND_GOODS"
 
       end
       render :nothing => true

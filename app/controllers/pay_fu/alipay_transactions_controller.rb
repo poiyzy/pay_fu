@@ -1,4 +1,5 @@
 require 'digest/md5'
+require 'open-uri'
 
 module PayFu
   class AlipayTransactionsController < ApplicationController
@@ -16,7 +17,7 @@ module PayFu
         send_goods(trade_no: notify.trade_no, amount: notify.price, invoice_no: notify.out_trade_no) if notify.trade_status == "WAIT_SELLER_SEND_GOODS"
 
       end
-      #render :nothing => true
+      render :nothing => true
     end
 
     def transaction_attributes(notify)
@@ -33,7 +34,7 @@ module PayFu
 
     def send_goods(options={})
       encoded_query_string = sign_params!(query_params(options)).map {|key, value| "#{key}=#{CGI.escape(value)}" }.join("&")
-      redirect_to "https://mapi.alipay.com/gateway.do?" + encoded_query_string
+      open("https://mapi.alipay.com/gateway.do?" + encoded_query_string)
     end
 
     private

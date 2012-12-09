@@ -1,7 +1,7 @@
 module PayFu
   class Transaction < ActiveRecord::Base
     belongs_to :user, class_name: User
-    attr_accessible :transaction_id, :transaction_type, :payment_status, :payment_date, :gross, :raw_post, :type, :user_id
+    attr_accessible :transaction_id, :transaction_type, :payment_status, :payment_date, :gross, :raw_post, :type, :user_id, :subject, :price
 
     after_create :update_product_to_user
     after_save :update_product_to_user

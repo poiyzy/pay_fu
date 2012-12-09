@@ -8,6 +8,8 @@ class CreatePayFuTransactions < ActiveRecord::Migration
       t.datetime :payment_date
       t.integer :gross
       t.text :raw_post
+      t.string :subject
+      t.decimal :price, precision: 8, scale: 2
 
       t.timestamps
     end

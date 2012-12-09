@@ -8,6 +8,7 @@ module PayFu
 
     def update_product_to_user
       if self.payment_status == "TRADE_FINISHED"
+        self.user.payment.product_id = Product.find_by_subject(self.subject).id
         self.user.payment.created_at = self.updated_at
         self.user.payment.save
       end

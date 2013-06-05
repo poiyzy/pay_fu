@@ -8,7 +8,7 @@ module PayFu
     def notify
       notify = Alipay::Notification.new(request.raw_post)
       if notify.acknowledge
-        if transaction = PayFu::AlipayTransaction.find_by_transaction_id(notify.trade_no)
+        if transaction = PayFu::AlipayTransaction.find_by_transaction_id(notify.trade_no) && transaction.payment_date < notify.notify_time
           transaction.update_attributes(transaction_attributes(notify))
         else
           PayFu::AlipayTransaction.create(transaction_attributes(notify))

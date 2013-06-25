@@ -8,7 +8,7 @@ module PayFu
     def notify
       notify = Alipay::Notification.new(request.raw_post)
       if notify.acknowledge
-        if transaction = PayFu::AlipayTransaction.find_by_transaction_id(notify.trade_no) && transaction.payment_date < notify.notify_time
+        if transaction = PayFu::AlipayTransaction.find_by_transaction_id(notify.trade_no)
           transaction.update_attributes(transaction_attributes(notify))
         else
           PayFu::AlipayTransaction.create(transaction_attributes(notify))
@@ -17,7 +17,7 @@ module PayFu
         send_goods(trade_no: notify.trade_no, amount: notify.price, invoice_no: notify.out_trade_no) if notify.trade_status == "WAIT_SELLER_SEND_GOODS"
 
       end
-      render :nothing => true
+      render :test => "success"
     end
 
     def transaction_attributes(notify)
